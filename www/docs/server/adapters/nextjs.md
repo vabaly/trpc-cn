@@ -6,34 +6,34 @@ slug: /server/adapters/nextjs
 ---
 
 :::tip
-tRPC's support for Next.js is far more expansive than just an adapter. This page covers a brief summary of how to set up the adapter, but complete documentation is [available here](../../client/nextjs/introduction.mdx)
+tRPC 对 Next.js 的支持远不止于适配器。本页面提供了配置适配器的简要摘要，而完整的文档[可以在这里找到](../../client/nextjs/introduction.mdx)。
 :::
 
-## Example app
+## 示例应用
 
 <table>
   <thead>
     <tr>
-      <th>Description</th>
-      <th>Links</th>
+      <th>描述</th>
+      <th>链接</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Next.js Minimal Starter</td>
+      <td>Next.js 最小化起始项目</td>
       <td>
         <ul>
           <li><a href="https://githubbox.com/trpc/trpc/tree/main/examples/next-minimal-starter">CodeSandbox</a></li>
-          <li><a href="https://github.com/trpc/trpc/tree/main/examples/next-minimal-starter">Source</a></li>
+          <li><a href="https://github.com/trpc/trpc/tree/main/examples/next-minimal-starter">源代码</a></li>
         </ul>
       </td>
     </tr>
   </tbody>
 </table>
 
-## Next.js example
+## Next.js 示例
 
-Serving your tRPC router in a Next.js project is straight-forward. Just create an API handler in `pages/api/trpc/[trpc].ts` as shown below:
+在 Next.js 项目中为你的 tRPC 路由器提供服务非常简单。只需按照下面的步骤在 `pages/api/trpc/[trpc].ts` 中创建一个 API 处理器:
 
 ```ts title='pages/api/trpc/[trpc].ts'
 import { createNextApiHandler } from '@trpc/server/adapters/next';
@@ -47,18 +47,19 @@ export default createNextApiHandler({
 });
 ```
 
-## Handling CORS, and other Advanced usage
+## 处理 CORS 和其他高级用法
 
-While you can usually just "set and forget" the API Handler as shown above, sometimes you might want to modify it further.
+通常情况下，你可以像上面展示的那样简单地设置 API 处理器，但有时你可能需要进一步修改它。
 
 The API handler created by `createNextApiHandler` and equivalents in other frameworks is just a function that takes `req` and `res` objects. This means you can also modify those objects before passing them to the handler, for example to [enable CORS](/docs/client/cors).
+由 `createNextApiHandler` 创建的 API 处理器及其他框架中等效的处理器只是一个接受 `req` 和 `res` 对象的函数。这意味着你可以在将它们传递给处理器之前修改这些对象，例如[启用 CORS](/docs/client/cors).。
 
 ```ts title='pages/api/trpc/[trpc].ts'
 import { createNextApiHandler } from '@trpc/server/adapters/next';
 import { createContext } from '../../../server/trpc/context';
 import { appRouter } from '../../../server/trpc/router/_app';
 
-// create the API handler, but don't return it yet
+// 创建 API 处理器，但暂时不返回它
 const nextApiHandler = createNextApiHandler({
   router: appRouter,
   createContext,
@@ -69,16 +70,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  // We can use the response object to enable CORS
+  // 可以使用响应对象来启用 CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Request-Method', '*');
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
   res.setHeader('Access-Control-Allow-Headers', '*');
 
-  // If you need to make authenticated CORS calls then
-  // remove what is above and uncomment the below code
+  // 如果你需要进行身份验证的 CORS 调用，则
+  // 删除上面的代码并取消下面代码的注释
 
-  // Allow-Origin has to be set to the requesting domain that you want to send the credentials back to
+  // Allow-Origin 必须设置为你想要将凭据发送回来的请求域
   // res.setHeader('Access-Control-Allow-Origin', 'http://example:6006');
   // res.setHeader('Access-Control-Request-Method', '*');
   // res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
@@ -91,7 +92,7 @@ export default async function handler(
     return res.end();
   }
 
-  // finally pass the request on to the tRPC handler
+  // 最后将请求传递给 tRPC 处理器
   return nextApiHandler(req, res);
 }
 ```

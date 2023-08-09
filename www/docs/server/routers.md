@@ -5,19 +5,19 @@ sidebar_label: Define Routers
 slug: /server/routers
 ---
 
-To begin building your tRPC-based API, you'll first need to define your router. Once you've mastered the fundamentals, you can [customize your routers](#advanced-usage) for more advanced use cases.
+开始构建基于 tRPC 的 API，首先需要定义路由。一旦掌握了基本原理，你可以[自定义路由](#advanced-usage)以应对更高级的用例。
 
-## Initialize tRPC
+## 初始化 tRPC
 
-You should initialize tRPC **exactly once** per application. Multiple instances of tRPC will cause issues.
+你应该在应用程序中**仅初始化一次** tRPC。多个 tRPC 实例会引起问题。
 
 ```ts twoslash title='server/trpc.ts'
 // @filename: trpc.ts
 // ---cut---
 import { initTRPC } from '@trpc/server';
 
-// You can use any variable name you like.
-// We use t to keep things simple.
+// 你可以使用任何变量名。
+// 我们使用 t 来保持简洁。
 const t = initTRPC.create();
 
 export const router = t.router;
@@ -25,13 +25,17 @@ export const middleware = t.middleware;
 export const publicProcedure = t.procedure;
 ```
 
-You'll notice we are exporting certain methods of the `t` variable here rather than `t` itself. This is to establish a certain set of procedures that we will use idiomatically in our codebase.
+你会注意到我们在此处导出了 `t` 变量的某些方法，而不是导出 `t` 本身。这是因为我们想要培养一种在代码中使用 “过程（Procedures）” 的习惯。
 
-## Defining a router
+> 译者注：通过导出特定方法，我们可以明确指定哪些过程（Procedures）是公共的、可重用的。
 
-Next, let's define a router with a procedure to use in our application. We have now created an API "endpoint".
+## 定义路由
 
-In order for these endpoints to be exposed to the frontend, your [Adapter](/docs/server/adapters) should be configured with your `appRouter` instance.
+接下来，让我们定义一个带有 “过程（Procedures）” 的路由，用于在应用程序中使用。我们很快将创建了一个 API “端点”。
+
+为了将这些端点暴露给前端，你的 [适配器（Adapter）](/docs/server/adapters) 应该配置为使用你的 `appRouter` 实例。
+
+> 译者注：适配器的内容本节代码没有谈到，需要前往上述的文档链接地址去了解。
 
 ```ts twoslash title="server/_app.ts"
 // @filename: trpc.ts
@@ -52,22 +56,22 @@ const appRouter = router({
   greeting: publicProcedure.query(() => 'hello tRPC v10!'),
 });
 
-// Export only the type of a router!
-// This prevents us from importing server code on the client.
+// 仅需导出路由的类型！
+// 这样可以防止我们在客户端导入服务器代码。
 export type AppRouter = typeof appRouter;
 ```
 
-## Advanced usage
+## 高级用法
 
-When initializing your router, tRPC allows you to:
+在初始化路由时（译者注：指的是调用 initTRPC 生成 `t` 对象的时候。因此此时也生成了路由 `t.router`，所以也可以说是初始化路由的时候），tRPC 允许你：
 
-- Setup [request contexts](/docs/server/context)
-- Assign [metadata](/docs/server/metadata) to procedures
-- [Format](/docs/server/error-formatting) and [handle](/docs/server/error-handling) errors
-- [Transform data](/docs/server/data-transformers) as needed
-- Customize the [runtime configuration](#runtime-configuration)
+- 设置[请求上下文](/docs/server/context)
+- 为 “过程（Procedures）” 分配[元数据](/docs/server/metadata)
+- [格式化](/docs/server/error-formatting)和[处理](/docs/server/error-handling)错误
+- 根据需要[转换数据](/docs/server/data-transformers)
+- 自定义[运行时配置])(#runtime-configuration)
 
-You can use method chaining to customize your `t`-object on initialization. For example:
+你可以将方法链式调用来在初始化时自定义 `t` 对象。例如：
 
 ```ts
 const t = initTRPC.context<Context>().meta<Meta>().create({
@@ -75,39 +79,39 @@ const t = initTRPC.context<Context>().meta<Meta>().create({
 });
 ```
 
-### Runtime Configuration
+### 运行时配置 {#runtime-configuration}
 
 ```ts
 export interface RuntimeConfig<TTypes extends RootConfigTypes> {
   /**
-   * Use a data transformer
+   * 使用数据转换器
    * @link https://trpc.io/docs/data-transformers
    */
   transformer: TTypes['transformer'];
 
   /**
-   * Use custom error formatting
+   * 使用自定义的错误格式化
    * @link https://trpc.io/docs/error-formatting
    */
   errorFormatter: ErrorFormatter<TTypes['ctx'], any>;
 
   /**
-   * Allow `@trpc/server` to run in non-server environments
-   * @warning **Use with caution**, this should likely mainly be used within testing.
+   * 允许 `@trpc/server` 在非服务器环境中运行
+   * @warning **谨慎使用**，这可能主要在测试中使用。
    * @default false
    */
   allowOutsideOfServer: boolean;
 
   /**
-   * Is this a server environment?
-   * @warning **Use with caution**, this should likely mainly be used within testing.
+   * 是否为服务器环境？
+   * @warning **谨慎使用**，这可能主要在测试中使用。
    * @default typeof window === 'undefined' || 'Deno' in window || process.env.NODE_ENV === 'test'
    */
   isServer: boolean;
 
   /**
-   * Is this development?
-   * Will be used to decide if the API should return stack traces
+   * 是否为开发环境？
+   * 将用于决定 API 是否应返回堆栈跟踪
    * @default process.env.NODE_ENV !== 'production'
    */
   isDev: boolean;

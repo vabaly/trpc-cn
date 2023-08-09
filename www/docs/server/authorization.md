@@ -5,9 +5,9 @@ sidebar_label: Authorization
 slug: /server/authorization
 ---
 
-The `createContext` function is called for each incoming request, so here you can add contextual information about the calling user from the request object.
+`createContext` 函数会在每个传入的请求上调用，所以你可以在这里通过请求对象添加关于调用用户的上下文信息。
 
-## Create context from request headers
+## 根据请求头创建上下文
 
 ```ts title='server/context.ts'
 import * as trpc from '@trpc/server';
@@ -19,10 +19,10 @@ export async function createContext({
   req,
   res,
 }: trpcNext.CreateNextContextOptions) {
-  // Create your context based on the request object
-  // Will be available as `ctx` in all your resolvers
+  // 根据请求对象创建上下文
+  // 后续在任意解析器中，可以通过 `ctx` 进行访问
 
-  // This is just an example of something you might want to do in your ctx fn
+  // 这只是一个你可能想在上下文函数中执行的示例操作
   async function getUserFromHeader() {
     if (req.headers.authorization) {
       const user = await decodeAndVerifyJwtToken(
@@ -41,7 +41,7 @@ export async function createContext({
 export type Context = inferAsyncReturnType<typeof createContext>;
 ```
 
-## Option 1: Authorize using resolver
+## 选项 1：使用解析器（resolver）进行授权
 
 ```ts title='server/routers/_app.ts'
 import { initTRPC, TRPCError } from '@trpc/server';
@@ -50,11 +50,11 @@ import type { Context } from '../context';
 export const t = initTRPC.context<Context>().create();
 
 const appRouter = t.router({
-  // open for anyone
+  // 开放给任何人
   hello: t.procedure
     .input(z.string().nullish())
     .query((opts) => `hello ${opts.input ?? opts.ctx.user?.name ?? 'world'}`),
-  // checked in resolver
+  // 在解析器（resolver）中进行检查
   secret: t.procedure.query((opts) => {
     if (!opts.ctx.user) {
       throw new TRPCError({ code: 'UNAUTHORIZED' });
@@ -66,7 +66,9 @@ const appRouter = t.router({
 });
 ```
 
-## Option 2: Authorize using middleware
+> 译者注：“解析器（resolver）” 就是 `.query(resolver)`、`.mutation(resolver)` 等这些 “过程（Procedure）” 函数的参数 `resolver`，这个 `resolver` 参数是一个具有输入输出的函数。 
+
+## 选项 2：使用中间件进行授权
 
 ```ts title='server/routers/_app.ts'
 import { initTRPC, TRPCError } from '@trpc/server';
@@ -85,16 +87,16 @@ const isAuthed = t.middleware((opts) => {
   });
 });
 
-// you can reuse this for any procedure
+// 你可以将其用于任何 “过程（procedure）”
 export const protectedProcedure = t.procedure.use(isAuthed);
 
 t.router({
-  // this is accessible for everyone
+  // 所有人都可以访问
   hello: t.procedure
     .input(z.string().nullish())
     .query((opts) => `hello ${opts.input ?? opts.ctx.user?.name ?? 'world'}`),
   admin: t.router({
-    // this is accessible only to admins
+    // 只有管理员可以访问
     secret: protectedProcedure.query((opts) => {
       return {
         secret: 'sauce',

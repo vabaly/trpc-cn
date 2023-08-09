@@ -5,11 +5,11 @@ sidebar_label: Error Formatting
 slug: /server/error-formatting
 ---
 
-The error formatting in your router will be inferred all the way to your client (&&nbsp;React&nbsp;components)
+你路由中的错误格式将一直传递到客户端（React 组件）。
 
-## Usage example highlighted
+## 用法示例
 
-### Adding custom formatting
+### 添加自定义格式
 
 ```ts title='server.ts'
 import { initTRPC } from '@trpc/server';
@@ -31,7 +31,8 @@ export const t = initTRPC.context<Context>().create({
 });
 ```
 
-### Usage in React
+### 在 React 中使用
+
 
 ```tsx title='components/MyComponent.tsx'
 export function MyComponent() {
@@ -42,7 +43,7 @@ export function MyComponent() {
   }, []);
 
   if (mutation.error?.data?.zodError) {
-    // zodError will be inferred
+    // zodError 的类型将被推断出来
     return (
       <pre>Error: {JSON.stringify(mutation.error.data.zodError, null, 2)}</pre>
     );
@@ -52,8 +53,9 @@ export function MyComponent() {
 ```
 
 ## All properties sent to `errorFormatter()`
+## 发送到errorFormatter()的所有属性
 
-> Since `v8.x` tRPC is compliant with [JSON-RPC 2.0](https://www.jsonrpc.org/specification)
+> 从 `v8.x` 开始，tRPC 符合 [JSON-RPC 2.0](https://www.jsonrpc.org/specification) 规范
 
 ```ts
 {
@@ -62,7 +64,7 @@ export function MyComponent() {
   path: string | undefined;
   input: unknown;
   ctx: undefined | TContext;
-  shape: DefaultErrorShape; // the default error shape
+  shape: DefaultErrorShape; // 默认的错误结构
 }
 ```
 

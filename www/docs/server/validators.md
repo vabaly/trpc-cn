@@ -5,20 +5,20 @@ sidebar_label: Input & Output Validators
 slug: /server/validators
 ---
 
-tRPC procedures may define validation logic for their input and/or output, and validators are also used to infer the types of inputs and outputs. We have first class support for many popular validators, and you can [integrate validators](#contributing-your-own-validator-library) which we don't directly support.
+tRPC 可以为 “过程（Procedures）” 的输入和（或）输出定义验证逻辑，并且验证器还用于推断输入和输出的类型。我们对许多流行的验证器提供了一流的支持，并且你可以[集成我们没有直接支持的验证器]((#contributing-your-own-validator-library)。
 
-## Input Validators
+## 输入验证器
 
-By defining an input validator, tRPC can check that a procedure call is correct and return a validation error if not.
+通过定义输入验证器，tRPC 可以检查 “过程（Procedure）” 调用是否正确，并在不正确的情况下返回验证的错误信息。
 
-To set up an input validator, use the `procedure.input()` method:
+要设置输入验证器，请使用 `procedure.input()` 方法：
 
 ```ts twoslash
 // @target: esnext
 import { initTRPC } from '@trpc/server';
 // ---cut---
 
-// Our examples use Zod by default, but usage with other libraries is identical
+// 我们的示例默认使用 Zod，但与其他库的用法相同
 import { z } from 'zod';
 
 export const t = initTRPC.create();
@@ -27,6 +27,7 @@ const publicProcedure = t.procedure;
 export const appRouter = t.router({
   hello: publicProcedure
     .input(
+      // 译者注：下面代码会返回一个 ZodObject 实例，是这样的形式 => ZodObject { shape: { name: ZodString } }
       z.object({
         name: z.string(),
       }),
@@ -41,9 +42,9 @@ export const appRouter = t.router({
 });
 ```
 
-### Input Merging
+### 输入合并
 
-`.input()` can be stacked to build more complex types, which is particularly useful when you want to utilise some common input to a collection of procedures in a [middleware](middlewares).
+`.input()` 可以叠加使用，以构建更复杂的类型验证，这在你希望将某些常见输入应用于一组过程时非常有用，尤其是在使用[中间件](middlewares)时。
 
 ```ts twoslash
 // @target: esnext
@@ -82,15 +83,15 @@ export const appRouter = t.router({
 });
 ```
 
-## Output Validators
+## 输出验证器
 
-Validating outputs is not always as important as defining inputs, since tRPC gives you automatic type-safety by inferring the return type of your procedures. Some reasons to define an output validator include:
+与定义输入验证器相比，输出验证器显得并不总是那么重要，因为 tRPC 会通过推断 “过程（Procedures）” 的返回类型来自动为你提供类型安全保障。定义输出验证器的一些原因包括：
 
-- Checking that data returned from untrusted sources is correct
-- Ensure that you are not returning more data to the client than necessary
+- 检查从不受信任的源返回的数据是否正确
+- 确保你不会向客户端返回非必要的数据
 
 :::info
-If output validation fails, the server will respond with an `INTERNAL_SERVER_ERROR`.
+如果输出验证失败，服务器将以 `INTERNAL_SERVER_ERROR` 进行响应。
 :::
 
 ```ts twoslash
@@ -120,14 +121,14 @@ export const appRouter = t.router({
 });
 ```
 
-## The most basic validator: a function
+## 最基本的验证器：函数
 
-You can define a validator without any 3rd party dependencies, with a function.
+你可以使用函数定义验证器从而无需任何第三方依赖。
 
 :::info
-We don't recommend making a custom validator unless you have a specific need, but it's important to understand that there's no magic here - it's _just typescript_!
+我们不建议在没有特定需求的情况下创建自定义验证器，但重要的是要了解这里没有任何神奇之处 - 它 _只是 typescript_！
 
-In most cases we recommend you use a [validation library](#library-integrations)
+在大多数情况下，我们建议你使用[验证库](#library-integrations)。
 :::
 
 ```ts twoslash
@@ -161,13 +162,15 @@ export const appRouter = t.router({
 export type AppRouter = typeof appRouter;
 ```
 
-## Library integrations
+## 集成的库
 
-tRPC works out of the box with a number of popular validation and parsing libraries. The below are some examples of usage with validators which we officially maintain support for.
+tRPC 与许多流行的 “验证、解析库” 可以直接配合使用。以下是我们官方支持的一些验证器的使用示例。
 
 ### With [Zod](https://github.com/colinhacks/zod)
+### 使用 [Zod](https://github.com/colinhacks/zod)
 
 Zod is our default recommendation, it has a strong ecosystem which makes it a great choice to use in multiple parts of your codebase. If you have no opinion of your own and want a powerful library which won't limit future needs, Zod is a great choice.
+Zod 是我们默认推荐的选项，它有一个强大的生态系统，可以在代码库的多个部分中使用，是一个很好的选择。如果你对此没有自己的看法，并且想要一个功能强大的库，不会限制未来的需求，那么 Zod 是一个很好的选择。
 
 ```ts twoslash
 import { initTRPC } from '@trpc/server';
@@ -200,7 +203,7 @@ export const appRouter = t.router({
 export type AppRouter = typeof appRouter;
 ```
 
-### With [Yup](https://github.com/jquense/yup)
+### 使用 [Yup](https://github.com/jquense/yup)
 
 ```ts twoslash
 import { initTRPC } from '@trpc/server';
@@ -233,7 +236,7 @@ export const appRouter = t.router({
 export type AppRouter = typeof appRouter;
 ```
 
-### With [Superstruct](https://github.com/ianstormtaylor/superstruct)
+### 使用 [Superstruct](https://github.com/ianstormtaylor/superstruct)
 
 ```ts twoslash
 import { initTRPC } from '@trpc/server';
@@ -258,7 +261,7 @@ export const appRouter = t.router({
 export type AppRouter = typeof appRouter;
 ```
 
-### With [scale-ts](https://github.com/paritytech/scale-ts)
+### 使用 [scale-ts](https://github.com/paritytech/scale-ts)
 
 ```ts twoslash
 import { initTRPC } from '@trpc/server';
@@ -283,7 +286,7 @@ export const appRouter = t.router({
 export type AppRouter = typeof appRouter;
 ```
 
-### With [Typia](https://typia.io/docs/utilization/trpc/)
+### 使用 [Typia](https://typia.io/docs/utilization/trpc/)
 
 ```ts
 import { initTRPC } from '@trpc/server';
@@ -313,7 +316,7 @@ export const appRouter = t.router({
 export type AppRouter = typeof appRouter;
 ```
 
-### With [ArkType](https://github.com/arktypeio/arktype#trpc)
+### 使用 [ArkType](https://github.com/arktypeio/arktype#trpc)
 
 ```ts twoslash
 import { initTRPC } from '@trpc/server';
@@ -338,7 +341,7 @@ export const appRouter = t.router({
 export type AppRouter = typeof appRouter;
 ```
 
-### With [@effect/schema](https://github.com/Effect-TS/schema)
+### 使用 [@effect/schema](https://github.com/Effect-TS/schema)
 
 ```ts twoslash
 import * as S from '@effect/schema/Schema';
@@ -363,7 +366,7 @@ export const appRouter = t.router({
 export type AppRouter = typeof appRouter;
 ```
 
-### With [runtypes](https://github.com/pelotom/runtypes)
+### 使用 [runtypes](https://github.com/pelotom/runtypes)
 
 ```ts twoslash
 import { initTRPC } from '@trpc/server';
@@ -387,7 +390,7 @@ export const appRouter = t.router({
 export type AppRouter = typeof appRouter;
 ```
 
-### With [Valibot](https://github.com/fabian-hiller/valibot)
+### 使用 [Valibot](https://github.com/fabian-hiller/valibot)
 
 ```ts twoslash
 import { initTRPC } from '@trpc/server';
@@ -420,11 +423,11 @@ export const appRouter = t.router({
 export type AppRouter = typeof appRouter;
 ```
 
-## Contributing your own Validator Library
+## 贡献你自己的验证器库
 
-If you work on a validator library which supports tRPC usage, please feel free to open a PR for this page with equivalent usage to the other examples here, and a link to your docs.
+如果你正在开发一个支持 tRPC 使用的验证器库，请随时在此页面上提交 PR，示例代码与其他示例相同，并提供你的文档链接。
 
-Integration with tRPC in most cases is as simple as meeting one of several existing type interfaces, but in some cases we may accept a PR to add a new supported interface. Feel free to open an issue for discussion. You can check the existing supported interfaces here:
+在大多数情况下，与 tRPC 集成非常简单，只需满足几个现有的类型接口之一即可，但在某些情况下，我们可能会接受一个 PR 来添加一个新的支持接口。请随时提交问题以进行讨论。你可以在这里查看现有的支持接口：
 
-- [Types for Inference](https://github.com/trpc/trpc/blob/main/packages/server/src/core/parser.ts)
-- [Functions for parsing/validation](https://github.com/trpc/trpc/blob/main/packages/server/src/core/internals/getParseFn.ts)
+- [用于推断的类型](https://github.com/trpc/trpc/blob/main/packages/server/src/core/parser.ts)
+- [用于解析/验证的函数](https://github.com/trpc/trpc/blob/main/packages/server/src/core/internals/getParseFn.ts)

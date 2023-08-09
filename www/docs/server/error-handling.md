@@ -5,9 +5,9 @@ sidebar_label: Error Handling
 slug: /server/error-handling
 ---
 
-Whenever an error occurs in a procedure, tRPC responds to the client with an object that includes an "error" property. This property contains all the information that you need to handle the error in the client.
+每当在 “过程（procedure）” 中发生错误时，tRPC 会向客户端响应一个包含 "error" 属性的对象。这个属性包含了在客户端处理错误所需的所有信息。
 
-Here's an example error response caused by a bad request input:
+下面是由于错误的请求输入而导致的错误响应示例：
 
 ```json
 {
@@ -25,36 +25,36 @@ Here's an example error response caused by a bad request input:
 }
 ```
 
-**Note**: the returned stack trace is only available in the development environment.
+**注意**：返回的堆栈跟踪仅在开发环境中可用。
 
-## Error codes
+## 错误码
 
-tRPC defines a list of error codes that each represent a different type of error and response with a different HTTP code.
+tRPC 定义了一系列错误码，每个错误码代表不同类型的错误，并使用不同的 HTTP 状态码进行响应。
 
-| Code                  | Description                                                                                                             | HTTP code |
+| 错误码                  | 描述                                                                                                             | HTTP状态码 |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------- | --------- |
-| BAD_REQUEST           | The server cannot or will not process the request due to something that is perceived to be a client error.              | 400       |
-| UNAUTHORIZED          | The client request has not been completed because it lacks valid authentication credentials for the requested resource. | 401       |
-| FORBIDDEN             | The server was unauthorized to access a required data source, such as a REST API.                                       | 403       |
-| NOT_FOUND             | The server cannot find the requested resource.                                                                          | 404       |
-| TIMEOUT               | The server would like to shut down this unused connection.                                                              | 408       |
-| CONFLICT              | The server request resource conflict with the current state of the target resource.                                     | 409       |
-| PRECONDITION_FAILED   | Access to the target resource has been denied.                                                                          | 412       |
-| PAYLOAD_TOO_LARGE     | Request entity is larger than limits defined by server.                                                                 | 413       |
-| METHOD_NOT_SUPPORTED  | The server knows the request method, but the target resource doesn't support this method.                               | 405       |
-| UNPROCESSABLE_CONTENT | The server understands the request method, and the request entity is correct, but the server was unable to process it.  | 422       |
-| TOO_MANY_REQUESTS     | The rate limit has been exceeded or too many requests are being sent to the server.                                     | 429       |
-| CLIENT_CLOSED_REQUEST | Access to the resource has been denied.                                                                                 | 499       |
-| INTERNAL_SERVER_ERROR | An unspecified error occurred.                                                                                          | 500       |
+| BAD_REQUEST           | 此为客户端错误，服务器无法处理请求或不会处理请求。              | 400       |
+| UNAUTHORIZED          | 由于缺乏对请求资源的有效身份验证凭据，客户端请求未完成。 | 401       |
+| FORBIDDEN             | 服务器未被授权访问所需的数据源，比如 REST API。	                                       | 403       |
+| NOT_FOUND             | 服务器无法找到请求的资源。 resource.                                                                          | 404       |
+| TIMEOUT               | 服务器希望关闭此未使用的连接。	                                                              | 408       |
+| CONFLICT              | 服务器请求的资源与目标资源的当前状态冲突。                                     | 409       |
+| PRECONDITION_FAILED   | 拒绝访问目标资源。	                                                                          | 412       |
+| PAYLOAD_TOO_LARGE     | 请求实体超过服务器定义的限制。                                                                 | 413       |
+| METHOD_NOT_SUPPORTED  | 服务器能接受请求方法，但目标资源不支持此方法。                               | 405       |
+| UNPROCESSABLE_CONTENT | 服务器接受请求方法，并且请求实体是正确的，但服务器无法处理它。	  | 422       |
+| TOO_MANY_REQUESTS     | 超过了速率限制或向服务器发送了过多的请求。                                     | 429       |
+| CLIENT_CLOSED_REQUEST | 拒绝访问资源。                                                                                 | 499       |
+| INTERNAL_SERVER_ERROR | 发生了未知的错误。                                                                                          | 500       |
 
-tRPC exposes a helper function, `getHTTPStatusCodeFromError`, to help you extract the HTTP code from the error:
+tRPC 提供了一个辅助函数 `getHTTPStatusCodeFromError`，帮助你从错误中提取 HTTP 状态码：
 
 ```ts twoslash
 import { TRPCError } from '@trpc/server';
 // ---cut---
 import { getHTTPStatusCodeFromError } from '@trpc/server/http';
 
-// Example error you might get if your input validation fails
+// 你可能会在输入验证失败时收到的错误示例
 const error: TRPCError = {
   name: 'TRPCError',
   code: 'BAD_REQUEST',
@@ -69,15 +69,15 @@ if (error instanceof TRPCError) {
 
 :::tip
 
-There's a full example of how this could be used in a Next.js API endpoint in the [Server Side Calls docs](server-side-calls).
+在[服务端调用文档](server-side-calls)中，有一个完整的示例，展示了如何在 Next.js API 端点中使用它。
 
 :::
 
-## Throwing errors
+## 抛出错误
 
-tRPC provides an error subclass, `TRPCError`, which you can use to represent an error that occurred inside a procedure.
+tRPC 提供了一个错误子类 `TRPCError`，你可以使用它来表示在 “过程（procedure）” 中发生的错误。
 
-For example, throwing this error:
+例如，抛出以下错误：
 
 ```ts title='server.ts'
 import { initTRPC, TRPCError } from '@trpc/server';
@@ -89,7 +89,7 @@ const appRouter = t.router({
     throw new TRPCError({
       code: 'INTERNAL_SERVER_ERROR',
       message: 'An unexpected error occurred, please try again later.',
-      // optional: pass the original error to retain stack trace
+      // 可选：传递原始错误以保留堆栈
       cause: theError,
     });
   }),
@@ -98,7 +98,7 @@ const appRouter = t.router({
 // [...]
 ```
 
-Results to the following response:
+将得到以下响应：
 
 ```json
 {
@@ -116,9 +116,9 @@ Results to the following response:
 }
 ```
 
-## Handling errors
+## 处理错误
 
-All errors that occur in a procedure go through the `onError` method before being sent to the client. Here you can handle or change errors.
+在将错误发送给客户端之前，所有在 “过程（procedure）” 中发生的错误都会经过 `onError` 方法。在这里，你可以处理或修改错误。
 
 ```ts title='pages/api/trpc/[trpc].ts'
 export default trpcNext.createNextApiHandler({
@@ -127,21 +127,21 @@ export default trpcNext.createNextApiHandler({
     const { error, type, path, input, ctx, req } = opts;
     console.error('Error:', error);
     if (error.code === 'INTERNAL_SERVER_ERROR') {
-      // send to bug reporting
+      // 发送以报告错误
     }
   },
 });
 ```
 
-The `onError` parameter is an object that contains all information about the error and the context it occurs in:
+`onError` 的参数是一个包含有关错误及其发生上下文等所有信息的对象：
 
 ```ts
 {
-  error: TRPCError; // the original error
+  error: TRPCError; // 原始错误
   type: 'query' | 'mutation' | 'subscription' | 'unknown';
-  path: string | undefined; // path of the procedure that was triggered
+  path: string | undefined; // 触发错误的 “过程（procedure）” 的路径
   input: unknown;
   ctx: Context | undefined;
-  req: BaseRequest; // request object
+  req: BaseRequest; // 请求对象
 }
 ```

@@ -5,23 +5,23 @@ sidebar_label: Response Caching
 slug: /server/caching
 ---
 
-The below examples uses [Vercel's edge caching](https://vercel.com/docs/serverless-functions/edge-caching) to serve data to your users as fast as possible.
+以下示例使用 Vercel 的[边缘缓存（Edge caching）](https://vercel.com/docs/serverless-functions/edge-caching)尽快向用户提供数据。
 
 :::info
-Always be careful with caching - especially if you handle personal information.
+始终对缓存保持警惕，特别是如果涉及个人信息。
 
 &nbsp;  
-Since batching is enabled by default, it's recommended to set your cache headers in the `responseMeta` function and make sure that there are not any concurrent calls that may include personal data - or to omit cache headers completely if there is an auth header or cookie.
+由于默认启用了批处理，建议在 `responseMeta` 函数中设置缓存头，并确保没有可能包含个人数据的并发调用，或者如果存在身份验证头或cookie，则应完全省略缓存标头。
 
 &nbsp;  
-You can also use a [`splitLink`](../client/links/splitLink.mdx) to split your public requests and those that should be private and uncached.
+你还可以使用 [`splitLink`](../client/links/splitLink.mdx) 来分割公共请求和应保持私密和不缓存的请求。
 :::
 
-## App Caching
+## 应用程序缓存
 
-If you turn on SSR in your app, you might discover that your app loads slowly on, for instance, Vercel, but you can actually statically render your whole app without using SSG; [read this Twitter thread](https://twitter.com/alexdotjs/status/1386274093041950722) for more insights.
+如果在应用程序中启用了SSR，你可能会发现你的应用程序在例如 Vercel 这样的服务上加载缓慢，但实际上你可以完全静态渲染整个应用程序而不使用 SSG；查看[这个 Twitter thread](https://twitter.com/alexdotjs/status/1386274093041950722)以获取更多见解。
 
-### Example code
+### 示例代码
 
 ```tsx title='utils/trpc.tsx'
 import { httpBatchLink } from '@trpc/client';
@@ -57,13 +57,13 @@ export const trpc = createTRPCNext<AppRouter>({
     const { clientErrors } = opts;
 
     if (clientErrors.length) {
-      // propagate http first error from API calls
+      // 返回来自 API 调用的第一个错误的 http 状态码
       return {
         status: clientErrors[0].data?.httpStatus ?? 500,
       };
     }
 
-    // cache request for 1 day + revalidate once every second
+    // 缓存请求 1天 + 每秒重新验证一次
     const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
     return {
       headers: {
@@ -74,13 +74,13 @@ export const trpc = createTRPCNext<AppRouter>({
 });
 ```
 
-## API Response caching
+## API 响应缓存
 
-Since all queries are normal HTTP `GET`s, we can use normal HTTP headers to cache responses, make the responses snappy, give your database a rest, and easily scale your API to gazillions of users.
+由于所有的查询都是普通的 HTTP `GET` 请求，我们可以使用普通的 HTTP 头来缓存响应，使响应更快，让数据库休息一下，并且轻松地将 API 扩展到数以亿计的用户。
 
-### Using `responseMeta` to cache responses
+### 使用 `responseMeta` 缓存响应
 
-> Assuming you're deploying your API somewhere that can handle stale-while-revalidate cache headers like Vercel.
+> 假设你将 API 部署在能够处理过期-同时重新验证缓存头部（如 Vercel）的地方。
 
 ```tsx title='server.ts'
 import { inferAsyncReturnType, initTRPC } from '@trpc/server';
@@ -107,7 +107,7 @@ const waitFor = async (ms: number) =>
 export const appRouter = t.router({
   public: t.router({
     slowQueryCached: t.procedure.query(async (opts) => {
-      await waitFor(5000); // wait for 5s
+      await waitFor(5000); // 等待 5s
 
       return {
         lastUpdated: new Date().toJSON(),
@@ -116,25 +116,25 @@ export const appRouter = t.router({
   }),
 });
 
-// Exporting type _type_ AppRouter only exposes types that can be used for inference
+// 只导出类型 `AppRouter` 用于推断类型
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
 export type AppRouter = typeof appRouter;
 
-// export API handler
+// 导出 API 处理程序
 export default trpcNext.createNextApiHandler({
   router: appRouter,
   createContext,
   responseMeta(opts) {
     const { ctx, paths, errors, type } = opts;
-    // assuming you have all your public routes with the keyword `public` in them
+    // 假设你所有的公共路由都包含关键字 `public`
     const allPublic = paths && paths.every((path) => path.includes('public'));
-    // checking that no procedures errored
+    // 检查是否没有出错的过程
     const allOk = errors.length === 0;
-    // checking we're doing a query request
+    // 检查是否为查询请求
     const isQuery = type === 'query';
 
     if (ctx?.res && allPublic && allOk && isQuery) {
-      // cache request for 1 day + revalidate once every second
+      // 缓存请求 1 天 + 每秒重新验证一次
       const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
       return {
         headers: {

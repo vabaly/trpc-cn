@@ -5,8 +5,8 @@ export function ConceptsChart() {
     <table width="100%">
       <thead>
         <tr>
-          <th>Term</th>
-          <th>Description</th>
+          <th>术语</th>
+          <th>描述</th>
         </tr>
       </thead>
       <tbody>
@@ -14,127 +14,126 @@ export function ConceptsChart() {
           <td>
             <a href="/docs/server/procedures">
               <strong className="text-green-600 dark:text-green-400">
-                Procedure&nbsp;↗
+                Procedure（过程）&nbsp;↗
               </strong>
             </a>
           </td>
           <td>
-            API endpoint - can be a{' '}
-            <strong className="text-teal-700 dark:text-teal-400">query</strong>,{' '}
+            API 端点 - 可以是一个{' '}
+            <strong className="text-teal-700 dark:text-teal-400">查询（Query）</strong>,{' '}
             <strong className="text-teal-700 dark:text-teal-400">
-              mutation
+              变更（Mutation）
             </strong>
-            , or{' '}
+            , 或{' '}
             <strong className="text-teal-700 dark:text-teal-400">
-              subscription
+              订阅（Subscription）
             </strong>
             .
           </td>
         </tr>
         <tr>
           <td>
-            <strong className="text-teal-700 dark:text-teal-400">Query</strong>
+            <strong className="text-teal-700 dark:text-teal-400">Query（查询）</strong>
           </td>
           <td>
-            A{' '}
+            获取某些数据的{' '}
             <strong className="text-green-600 dark:text-green-400">
-              procedure
+              Procedure（过程）
             </strong>{' '}
-            that gets some data.
+            。
           </td>
         </tr>
         <tr>
           <td>
             <strong className="text-teal-700 dark:text-teal-400">
-              Mutation
+              Mutation（变更）
             </strong>
           </td>
           <td>
-            A{' '}
+            创建、更新或删除某些数据的{' '}
             <strong className="text-green-600 dark:text-green-400">
-              procedure
+              Procedure（过程）
             </strong>{' '}
-            that creates, updates, or deletes some data.
+            。
           </td>
         </tr>
         <tr>
           <td>
             <a href="/docs/subscriptions">
               <strong className="text-teal-700 dark:text-teal-400">
-                Subscription
+                Subscription（订阅）
               </strong>
             </a>
           </td>
           <td>
-            A{' '}
+            创建持久连接并监听更改的{' '}
             <strong className="text-green-600 dark:text-green-400">
-              procedure
+              Procedure（过程）
             </strong>{' '}
-            that creates a persistent connection and listens to changes.
+            。
           </td>
         </tr>
         <tr>
           <td>
             <a href="/docs/server/routers">
               <strong className="text-blue-700 dark:text-blue-400">
-                Router&nbsp;↗
+                Router（路由）&nbsp;↗
               </strong>
             </a>
           </td>
           <td>
-            A collection of{' '}
+            一组共享命名空间下的{' '}
             <strong className="text-green-600 dark:text-green-400">
-              procedures
+              Procedure（过程）
             </strong>{' '}
-            (and/or other routers) under a shared namespace.
+            （和/或其他路由）的集合。
           </td>
         </tr>
         <tr>
           <td>
             <a href="/docs/server/context">
               <strong className="text-violet-700 dark:text-violet-400">
-                Context&nbsp;↗
+                Context（上下文）&nbsp;↗
               </strong>
             </a>
           </td>
           <td>
-            Stuff that every{' '}
+            每个{' '}
             <strong className="text-green-600 dark:text-green-400">
-              procedure
+              Procedure（过程）
             </strong>{' '}
-            can access. Commonly used for things like session state and database
-            connections.
+            都可以访问的内容。通常用于会话状态和数据库连接等内容。
           </td>
         </tr>
         <tr>
           <td>
             <a href="/docs/server/middlewares">
               <strong className="text-blue-600 dark:text-blue-400">
-                Middleware&nbsp;↗
+                Middleware（中间件）&nbsp;↗
               </strong>
             </a>
           </td>
           <td>
-            A function that can run code before and after a{' '}
+            在{' '}
             <strong className="text-green-600 dark:text-green-400">
-              procedure
+              Procedure（过程）
             </strong>
-            . Can modify{' '}
+            之前和之后运行代码的函数。可以修改{' '}
             <strong className="text-violet-700 dark:text-violet-400">
-              context
+              Context（上下文）
             </strong>
-            .
+            。
           </td>
         </tr>
         <tr>
           <td>
             <a href="/docs/server/procedures#input-validation">
               <strong className="text-blue-600 dark:text-blue-400">
-                Validation&nbsp;↗
+                Validation（验证）&nbsp;↗
               </strong>
             </a>
           </td>
-          <td>&quot;Does this input data contain the right stuff?&quot;</td>
+          <td>“输入的数据是否包含正确的内容？”</td>
         </tr>
       </tbody>
     </table>

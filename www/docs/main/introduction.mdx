@@ -23,7 +23,7 @@ author_image_url: https://avatars1.githubusercontent.com/u/459267?s=460&v=4
     </defs>
   </svg>
 
-  <p>End-to-end typesafe APIs made easy</p>
+  <p>轻松创建端到端类型安全的 API</p>
   <p>
     <a href="https://codecov.io/gh/trpc/trpc">
       <img
@@ -57,43 +57,42 @@ author_image_url: https://avatars1.githubusercontent.com/u/459267?s=460&v=4
   */}
 </div>
 
-## Introduction
+## 简介
 
 <p>
-  <abbr title="TypeScript Remote Procedure Call">tRPC</abbr> allows you to
-  easily build & consume fully typesafe APIs without schemas or code generation.
+  <abbr title="TypeScript Remote Procedure Call">tRPC</abbr> 允许你轻松创建和使用完全符合类型安全的 API，无需通过 schemas 或代码生成的方式来实现。
 </p>
 
-As TypeScript and static typing increasingly becomes a best practice in web development, API contracts present a major pain point. We need better ways to **statically type** our API endpoints and **share those types** between our client and server (or server-to-server). We set out to build a simple library for building typesafe APIs that leverages the full power of modern TypeScript.
+随着 TypeScript 和静态类型在 Web 开发中逐渐成为最佳实践，API 接口规范成为一个主要的痛点。我们需要更好的方法来为我们的 API 接口 **提供静态类型**，并在客户端和服务器（或服务器之间）之间 **共享这些类型**。我们充分利用了现代 TypeScript 的全部功能着手构建了一个简单的库，用于构建类型安全的 API。
 
-### An alternative to traditional REST or GraphQL
+### 传统 REST 或 GraphQL 的一个替代方案
 
-Currently, GraphQL is the dominant way to implement typesafe APIs in TypeScript ([and it's amazing!](../further/further-reading.md#relationship-to-graphql)). Since GraphQL is designed as a language-agnostic specification for implementing APIs, it doesn't take full advantage of the power of a language like TypeScript.
+目前，GraphQL 是在 TypeScript 中实现类型安全 API 的主流方式（[而且它非常棒！](../further/further-reading.md#relationship-to-graphql)）。由于 GraphQL 是为实现 API 而设计的与语言无关的规范，它无法充分发挥像 TypeScript 这样的语言的强大功能。
 
-If your project is built with full-stack TypeScript, you can share types **directly** between your client and server, without relying on code generation.
+如果您的项目全栈都是使用 TypeScript 构建的，您可以**直接**在客户端和服务器之间共享类型，而无需依赖代码生成。
 
 <!--
-### tRPC explained from a REST API background
+### 从 REST API 的背景来解释 tRPC
 
-tRPC can co-exist with a REST API, as it uses a single endpoint. On this specific endpoint tRPC will itself function as a router, meaning tRPC will redirect internally to the right handler on every incoming request.
+tRPC 可以与 REST API 共存，因为它使用单个端点。在这个特定的端点上，tRPC 本身充当路由的角色，意味着 tRPC 会在每个请求传入时内部重定向到正确的处理程序。
 
-Like an Express router, tRPC also supports middleware and registering handlers. Unlike Express, tRPC embraces TypeScript to its fullest, providing built-in input and output validation.
+与 Express 路由类似，tRPC 也支持中间件和注册处理程序。但与 Express 不同的是，tRPC 充分融合了 TypeScript，提供了内置的输入和输出验证。
 
-On the frontend, `@trpc/client` provides developers typesafety and autocompletion for the available endpoints. It shows what input is required and infers the output type of the endpoint. This ensures that in the case you make breaking changes to an endpoint on the server, TypeScript will warn you in the frontend.
+在前端，`@trpc/client` 这个包为开发人员提供了端点的类型安全和自动补全功能。它展示了每个端点所需的输入，并推断出端点的输出类型。这样，如果您在服务器上对端点进行了破坏性的更改，TypeScript 将在前端发出警告。
 -->
 
-### Who is tRPC for?
+### 谁是 tRPC 的目标对象
 
-tRPC is for full-stack TypeScript developers. It makes it easy to write endpoints that you can safely use in both the front and backend of your app. Type errors with your API contracts will be caught at build time, reducing the surface for bugs in your application at runtime.
+tRPC 适用于全栈都使用 TypeScript 的开发人员。它可以轻松地编写端点，然后你可以安全地在应用程序的前端和后端中使用这些端点。在构建时，它可以捕获与 API 规范相关的类型错误，从而减少运行时在应用程序中的错误。
 
-## Features
+## 特点
 
-- ✅&nbsp; Well-tested and production ready.
-- 🧙‍♂️&nbsp; Full static typesafety & autocompletion on the client, for inputs, outputs, and errors.
-- 🐎&nbsp; Snappy DX - No code generation, run-time bloat, or build pipeline.
-- 🍃&nbsp; Light - tRPC has zero deps and a tiny client-side footprint.
-- 🐻&nbsp; For new and old projects - Easy to start with or add to your existing brownfield project.
-- 🔋&nbsp; Framework agnostic - The tRPC community has built [adapters](https://trpc.io/docs/awesome-trpc#-extensions--community-add-ons) for all of the most popular frameworks.
-- 🥃&nbsp; Subscriptions support - Add typesafe observability to your application.
-- ⚡️&nbsp; Request batching - Requests made at the same time can be automatically combined into one.
-- 👀&nbsp; Examples - Check out an [example](example-apps.mdx) to learn with or use as a starting point.
+- ✅&nbsp; 经过充分的测试，适用于生产环境。
+- 🧙‍♂️&nbsp; 客户端具有完整的静态类型安全性和自动补全功能，包括输入、输出和错误。
+- 🐎&nbsp; 优秀的开发体验 - 无需代码生成、运行时膨胀或构建流程。
+- 🍃&nbsp; 轻量级 - tRPC 没有任何依赖，客户端占用空间很小。
+- 🐻&nbsp; 适用于新项目和旧项目 - 它易于入门，也可以添加到现有的老项目中。
+- 🔋&nbsp; 框架无关 - tRPC 社区为所有最流行的框架构建了[适配器](https://trpc.io/docs/awesome-trpc#-extensions--community-add-ons)。
+- 🥃&nbsp; 支持订阅 - 为你的应用程序添加类型安全的观测。
+- ⚡️&nbsp; 请求批处理 - 同时发出的请求可以自动合并为一个请求。
+- 👀&nbsp; 示例 - 查看[示例](example-apps.mdx)以学习或作为项目的起点。

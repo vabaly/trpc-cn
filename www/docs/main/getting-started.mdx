@@ -5,49 +5,50 @@ sidebar_label: Getting Started
 slug: /getting-started
 ---
 
-## A quick look at tRPC
+## 快速了解 tRPC 的视频
 
-For a quick video overview of tRPC's concepts, check out the videos below:
+请查看下面的视频快速了解 tRPC 的概念：
 
 - [tRPC in 100 seconds](https://www.youtube.com/watch?v=0DyAyLdVW0I)
 - [tRPC in 5 minutes](https://www.youtube.com/watch?v=S6rcrkbsDI0)
 - [tRPC in 15 minutes](https://www.youtube.com/watch?v=2LYM8gf184U)
 
-## Give tRPC a try
+## 尝试 tRPC
 
-The fastest way to try tRPC is in an online REPL. Here are some options you can try out:
+最快的尝试 tRPC 的方法是在在线的 REPL 中进行。以下是一些可以尝试的选项：
 
-- [Minimal Example](https://stackblitz.com/github/trpc/trpc/tree/main/examples/minimal?file=server%2Findex.ts&file=client%2Findex.ts&view=editor) - a minimal Node.js http server, and a client that calls a function on the server and logs the request to the console.
-- [Minimal Next.js Example](https://stackblitz.com/github/trpc/trpc/tree/main/examples/next-minimal-starter?file=src%2Fpages%2Fapi%2Ftrpc%2F[trpc].ts&file=src%2Fpages%2Findex.tsx) - the smallest possible Next.js app that uses tRPC. It has a single endpoint that returns a string, and a page that calls that endpoint and displays the result.
+- [Minimal Example](https://stackblitz.com/github/trpc/trpc/tree/main/examples/minimal?file=server%2Findex.ts&file=client%2Findex.ts&view=editor) - 一个最简的 Node.js http 服务器和一个调用服务器上的函数并将请求输出到控制台的客户端。
+- [Minimal Next.js Example](https://stackblitz.com/github/trpc/trpc/tree/main/examples/next-minimal-starter?file=src%2Fpages%2Fapi%2Ftrpc%2F[trpc].ts&file=src%2Fpages%2Findex.tsx) - 最简的使用 tRPC 的 Next.js 应用程序。它有一个返回字符串的端点和一个调用该端点并显示结果的页面。
 
-If you prefer to get started in your local environment, you can use one of our [example apps](./example-apps.mdx) as a starter project that you can experiment with locally.
+如果你更喜欢在本地环境中开始，可以使用我们的[示例应用](./example-apps.mdx)作为可以在本地进行实验的起始项目。
 
-## Use tRPC
+## 使用 tRPC
 
-"Using tRPC" means different things to different people. The goal of this page is to guide you to the right resources based on your goals.
+"使用 tRPC" 对不同的人意味着不同的事情。本页面的目标是根据你的目标为你提供正确的资源指南。
 
-### Becoming productive in an existing tRPC project
+### 在现有的 tRPC 项目中提高生产力
 
-- Read the [concepts](./concepts.mdx) page.
-- Become familiar with [routers](../server/routers.md), [procedures](../server/procedures.md), [context](../server/context.md), and [middleware](../server/middlewares.md).
-- If you are using React, read about [useQuery](../client/react/useQuery.md), [useMutation](../client/react/useMutation.md) and [useContext](../client/react/useContext.mdx).
+- 阅读[概念](./concepts.mdx)页面。
+- 熟悉[路由](../server/routers.md)、[过程](../server/procedures.md)、[上下文](../server/context.md)和[中间件](../server/middlewares.md)。
+- 如果你使用 React，请阅读有关 [useQuery](../client/react/useQuery.md)、[useMutation](../client/react/useMutation.md) 和 [useContext](../client/react/useContext.mdx)的文档。
 
-### Creating a new project
+### 创建一个新项目
 
-Since tRPC can live inside of many different frameworks, you will first need to decide where you want to use it.
+由于 tRPC 可以存在于许多不同的框架中，你首先需要决定你想在哪里使用它。
 
-On the backend, there are [adapters](../server/adapters-intro.md) for a range of frameworks as well as vanilla Node.js. On the frontend, you can use our [React](../client/react/introduction.mdx) or [Next.js](../client/nextjs/introduction.mdx) integrations, a [third-party integration](../community/awesome-trpc.mdx#frontend-frameworks) for a variety of other frameworks, or the [Vanilla Client](../client/vanilla/setup.mdx), which works anywhere JavaScript runs.
+在后端，有适用于多个框架以及原生 Node.js 的[适配器](../server/adapters-intro.md)。在前端，你可以使用我们的 [React](../client/react/introduction.mdx) 或 [Next.js](../client/nextjs/introduction.mdx) 集成，也可以使用各种其他框架的[第三方集成](../community/awesome-trpc.mdx#frontend-frameworks)，或者工作在任何支持 JavaScript 的地方的[原生客户端](../client/vanilla/setup.mdx)。
 
-After choosing your stack, you can either scaffold your app using a [template](./example-apps.mdx), or start from scratch using the documentation for your chosen backend and frontend integration.
+选择了你的技术栈之后，你可以使用[模板](./example-apps.mdx)来构建你的应用程序，或者根据所选的后端适配器和前端集成的文档从头开始构建。
 
 ### Adding tRPC to an existing project
+### 将 tRPC 添加到现有项目
 
-Adding tRPC to an existing project is not significantly different from starting a new project, so the same resources apply. The main challenge is that it can feel difficult to know how to integrate tRPC with your existing application. Here are some tips:
+将 tRPC 添加到现有项目与创建新项目并没有太大差异，因此资源都是通用的。主要的挑战在于如何将 tRPC 与现有应用程序集成。以下是一些建议：
 
-- You don't need to port all of your existing backend logic to tRPC. A common migration strategy is to initally only use tRPC for new endpoints, and only later migrate existing endpoints to tRPC.
-- If you're not sure where to start, check the documentation for your backend [adapter](../server/adapters-intro.md) and frontend implementation, as well as the [example apps](./example-apps.mdx).
-- If you are looking for some inspiration of how tRPC might look as part of a larger codebase, there are some examples in [Open-source projects using tRPC](../community/awesome-trpc.mdx#-open-source-projects-using-trpc).
+- 你不需要将所有现有的后端逻辑迁移到 tRPC。常见的迁移策略是最初仅在新端点中使用 tRPC，然后再逐步将现有端点迁移到 tRPC。
+- 如果不确定从何处开始，请查阅你选择的后端[适配器](../server/adapters-intro.md)和前端实现的文档，以及[示例应用](./example-apps.mdx)。
+- 如果你正在寻找关于如何在较大代码库中使用 tRPC 的灵感，可以在 [使用 tRPC 的开源项目](../community/awesome-trpc.mdx#-open-source-projects-using-trpc) 中找到一些示例。
 
-## Join our Community
+## 加入我们的社区
 
-Join us in the [tRPC Discord](https://trpc.io/discord) to share your experiences, ask questions, and get help from the community!
+加入我们的 [tRPC Discord](https://trpc.io/discord) 以分享你的经验、提出你的问题并从社区获得帮助！

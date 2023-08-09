@@ -7,11 +7,12 @@ slug: /concepts
 
 import { ConceptsChart } from '../../src/components/ConceptsChart';
 
-## What is RPC? What mindset should I adopt?
+## 什么是 RPC？应该拥有什么样的思维模式？
 
-### It's just functions
+### 它只是函数
 
 RPC is short for "Remote Procedure Call". It is a way of calling functions on one computer (the server) from another computer (the client). With traditional HTTP/REST APIs, you call a URL and get a response. With RPC, you call a function and get a response.
+RPC 是 "Remote Procedure Call" 的缩写，它是一种在一台计算机（客户端）上调用另一台计算机（服务器）上面的函数的方式。在传统的 HTTP/REST API 中，你需要调用一个 URL 并获得一个响应。使用 RPC 后，则是调用一个函数并获得一个响应。
 
 ```ts
 // HTTP/REST
@@ -22,12 +23,12 @@ const user = await res.json();
 const user = await api.users.getById({ id: 1 });
 ```
 
-### Don't think about HTTP/REST implementation details
+### 不要考虑 HTTP/REST 的实现细节
 
-If you inspect the network traffic of a tRPC app, you'll see that it's just fairly standard HTTP requests and responses. But you don't need to think about the implementation details while writing your application code. You call functions, and tRPC takes care of everything else.
+如果你检查 tRPC 应用程序的网络流量，你会发现它只是相当标准的 HTTP 请求和响应。但是在编写应用程序代码时，你不需要考虑实现细节。你调用函数，tRPC 会处理其他所有事情。
 
-## Vocabulary
+## 术语
 
-Below are some terms that are used frequently in the tRPC ecosystem. We'll be using these throughout the documentation, so it's good to get familiar with them. Most of these concepts also have their own pages in the documentation.
+以下是在 tRPC 生态系统中经常使用的一些术语。我们将在整个文档中使用这些术语，所以熟悉它们是很好的。这些概念中的大多数也在文档中有自己的页面。
 
 <ConceptsChart />

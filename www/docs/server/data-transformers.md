@@ -5,21 +5,21 @@ sidebar_label: Data Transformers
 slug: /server/data-transformers
 ---
 
-You are able to serialize the response data & input args. The transformers need to be added both to the server and the client.
+你可以序列化响应数据和输入参数。转换器（Transformers）需要同时添加到服务器和客户端。
 
-## Using [superjson](https://github.com/blitz-js/superjson)
+## 使用 [superjson](https://github.com/blitz-js/superjson)
 
-SuperJSON allows us to transparently use, e.g., standard `Date`/`Map`/`Set`s over the wire between the server and client. That is, you can return any of these types from your API-resolver and use them in the client without having to recreate the objects from JSON.
+SuperJSON 允许我们在服务器和客户端之间透明地使用标准的 `Date`/`Map`/`Set` 类型。也就是说，你可以从 API 解析器（resolver）返回这些类型之一，并在客户端中使用它们，而无需重新创建 JSON 对象。
 
-### How to
+### 如何操作
 
-#### 1. Install
+#### 1. 安装
 
 ```bash
 yarn add superjson
 ```
 
-#### 2. Add to your `initTRPC`
+#### 2. 添加到 `initTRPC`
 
 ```ts title='routers/router/_app.ts'
 import { initTRPC } from '@trpc/server';
@@ -30,7 +30,7 @@ export const t = initTRPC.create({
 });
 ```
 
-#### 3. Add to `createTRPCProxyClient()` or `createTRPCNext()`
+#### 3. 添加到 `createTRPCProxyClient()` 或 `createTRPCNext()`
 
 ```ts
 import { createTRPCProxyClient } from '@trpc/client';
@@ -60,21 +60,21 @@ export const trpc = createTRPCNext<AppRouter>({
 });
 ```
 
-## Different transformers for upload and download
+## 上传和下载使用不同的转换器
 
-If a transformer should only be used for one direction or different transformers should be used for upload and download (e.g., for performance reasons), you can provide individual transformers for upload and download. Make sure you use the same combined transformer everywhere.
+如果一个转换器只应用于一个方向，或者上传和下载应使用不同的转换器（例如出于性能原因），你可以为上传和下载提供单独的转换器。确保在所有地方使用相同的转换器组合。
 
-### How to
+### 如何操作
 
-Here [superjson](https://github.com/blitz-js/superjson) is used for uploading and [devalue](https://github.com/Rich-Harris/devalue) for downloading data because devalue is a lot faster but insecure to use on the server.
+这里使用 [superjson](https://github.com/blitz-js/superjson) 用于上传，使用 [devalue](https://github.com/Rich-Harris/devalue) 用于下载数据，因为 devalue 速度更快，但在服务器上使用不安全。
 
-#### 1. Install
+#### 1. 安装
 
 ```bash
 yarn add superjson devalue
 ```
 
-#### 2. Add to `utils/trpc.ts`
+#### 2. 添加到 `utils/trpc.ts`
 
 ```ts title='utils/trpc.ts'
 import { uneval } from 'devalue';
@@ -86,13 +86,13 @@ export const transformer = {
   input: superjson,
   output: {
     serialize: (object) => uneval(object),
-    // This `eval` only ever happens on the **client**
+    // 此 `eval` 仅在 **客户端** 上发生
     deserialize: (object) => eval(`(${object})`),
   },
 };
 ```
 
-#### 3. Add to your `AppRouter`
+#### 3. 添加到 `AppRouter`
 
 ```ts title='server/routers/_app.ts'
 import { initTRPC } from '@trpc/server';
@@ -107,7 +107,7 @@ export const appRouter = t.router({
 });
 ```
 
-#### 4. Add to `createTRPCProxyClient()`
+#### 4. 添加到 `createTRPCProxyClient()`
 
 ```ts title='client.ts'
 import { createTRPCProxyClient } from '@trpc/client';
@@ -119,7 +119,7 @@ export const client = createTRPCProxyClient<AppRouter>({
 });
 ```
 
-## `DataTransformer` interface
+## `DataTransformer` 接口
 
 ```ts
 export interface DataTransformer {
@@ -129,33 +129,33 @@ export interface DataTransformer {
 
 interface InputDataTransformer extends DataTransformer {
   /**
-   * This function runs **on the client** before sending the data to the server.
+   * 这个函数在**客户端**上运行，时机是在将数据发送到服务器之前。
    */
   serialize(object: any): any;
   /**
-   * This function runs **on the server** to transform the data before it is passed to the resolver
+   * 这个函数在**服务器端**上运行，时机是在将数据传递给解析器（resolver）之前进行转换。
    */
   deserialize(object: any): any;
 }
 
 interface OutputDataTransformer extends DataTransformer {
   /**
-   * This function runs **on the server** before sending the data to the client.
+   * 这个函数在**服务器端**上运行，时机是在将数据发送到客户端之前。
    */
   serialize(object: any): any;
   /**
-   * This function runs **only on the client** to transform the data sent from the server.
+   * 这个函数仅在**客户端上**运行，用于转换从服务器发送的数据。
    */
   deserialize(object: any): any;
 }
 
 export interface CombinedDataTransformer {
   /**
-   * Specify how the data sent from the client to the server should be transformed.
+   * 指定从客户端发送到服务器的数据应该如何转换。
    */
   input: InputDataTransformer;
   /**
-   * Specify how the data sent from the server to the client should be transformed.
+   * 指定从服务器发送到客户端的数据应该如何转换。
    */
   output: OutputDataTransformer;
 }

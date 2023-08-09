@@ -5,9 +5,9 @@ sidebar_label: Merging Routers
 slug: /server/merging-routers
 ---
 
-Writing all API-code in your code in the same file is not a great idea. It's easy to merge routers with other routers.
+在同一个文件中编写所有的 API 代码并不是一个好主意。（译者注；因此，你需要把不同模块的路由写在不同文件里，然后再把它们合并起来。）而将不同文件的路由合并在一起是非常容易的。
 
-## Merging with child routers
+## 子路由合并
 
 ```ts twoslash title='server.ts'
 // @filename: trpc.ts
@@ -27,11 +27,11 @@ import { userRouter } from './user';
 import { postRouter } from './post';
 
 const appRouter = router({
-  user: userRouter, // put procedures under "user" namespace
-  post: postRouter, // put procedures under "post" namespace
+  user: userRouter, // 将 “过程（Procedures）” 放在 "user" 命名空间下
+  post: postRouter, // 将 “过程（Procedures）” 放在 "post" 命名空间下
 });
 
-// You can then access the merged route with
+// 然后可以通过以下方式访问合并后的路由
 // http://localhost:3000/trpc/<NAMESPACE>.<PROCEDURE>
 
 export type AppRouter = typeof appRouter;
@@ -70,9 +70,9 @@ export const userRouter = router({
 
 ```
 
-## Merging with `t.mergeRouters`
+## 使用 `t.mergeRouters` 合并
 
-If you prefer having all procedures flat in one single namespace, you can instead use `t.mergeRouters`
+如果你更喜欢在一个单一的命名空间中扁平地拥有所有的 “过程（Procedures）”，你可以使用 `t.mergeRouters`。
 
 ```ts twoslash title='server.ts'
 // @filename: trpc.ts
